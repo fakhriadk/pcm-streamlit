@@ -1,0 +1,27 @@
+import streamlit as st
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+
+st.set_page_config(page_title="PCM - Image Viewer", layout="centered")
+st.title("🧠 PCM - Medical Image Viewer (Step 1)")
+
+# Upload file
+uploaded_file = st.file_uploader("Upload Medical Image", type=["png", "jpg", "jpeg"])
+
+if uploaded_file is not None:
+    # Buka dan konversi ke grayscale
+    image = Image.open(uploaded_file).convert("L")
+    image_array = np.array(image)
+
+    # Tampilkan gambar
+    st.subheader("Original Image")
+    st.image(image, use_column_width=True, clamp=True)
+
+    # Tampilkan histogram
+    st.subheader("Histogram")
+    fig, ax = plt.subplots()
+    ax.hist(image_array.ravel(), bins=256, range=(0, 256), color='gray')
+    ax.set_xlabel("Pixel Value")
+    ax.set_ylabel("Frequency")
+    st.pyplot(fig)
